@@ -2,7 +2,8 @@
   <v-toolbar fixed class="cyan" dark>
     <v-toolbar-title class="mr-4">
       <span
-      @click="navigateTo({name: 'root'})">
+        class="home"
+        @click="navigateTo({name: 'root'})">
         TabTracker
       </span>
     </v-toolbar-title>
@@ -16,6 +17,11 @@
   <v-spacer></v-spacer>
 
   <v-toolbar-items>
+    <v-btn flat dark
+      @click="navigateTo({name: 'login'})">
+      Login
+    </v-btn>
+
     <v-btn flat dark
       @click="navigateTo({name: 'register'})">
       Sign Up
@@ -35,4 +41,11 @@ export default {
 </script>
 
 <style scoped>
+.home {
+  cursor: pointer;
+}
+
+.home:hover {
+  color: #E9E;
+}
 </style>
