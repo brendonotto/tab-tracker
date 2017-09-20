@@ -5,27 +5,39 @@
         <panel title="Song Metadata">
           <v-text-field
             label="Title"
-            v-model="title"
+            required
+            :rules="[required]"
+            v-model="song.title"
           ></v-text-field>
           <v-text-field
             label="Artist"
-            v-model="artist"
+            required
+            :rules="[required]"
+            v-model="song.artist"
           ></v-text-field>
           <v-text-field
             label="Genre"
-            v-model="genre"
+            required
+            :rules="[required]"
+            v-model="song.genre"
           ></v-text-field>
           <v-text-field
             label="Album"
-            v-model="album"
+            required
+            :rules="[required]"
+            v-model="song.album"
           ></v-text-field>
           <v-text-field
             label="Album Image Url"
-            v-model="albumImageUrl"
+            required
+            :rules="[required]"
+            v-model="song.albumImageUrl"
           ></v-text-field>
           <v-text-field
             label="YouTube Id"
-            v-model="youtubeId"
+            required
+            :rules="[required]"
+            v-model="song.youtubeId"
           ></v-text-field>
         </panel>
       </v-flex>
@@ -34,16 +46,31 @@
         <panel title="Song structure" class="ml-2">
           <v-text-field
             label="Tab"
+            required
+            :rules="[required]"
             multi-line
-            v-model="tab"
+            v-model="song.tab"
           ></v-text-field>
 
           <v-text-field
             label="Lyrics"
+            required
+            :rules="[required]"
             multi-line
-            v-model="lyrics"
+            v-model="song.lyrics"
           ></v-text-field>
         </panel>
+
+        <div class="danger-alert" v-if="error">
+          {{error}}
+        </div>
+
+        <v-btn
+          dark
+          class="cyan"
+          @click="create">
+          Create Song
+        </v-btn>
       </v-flex>
     </v-layout>
   </div>
@@ -51,17 +78,45 @@
 
 <script>
 import Panel from '@/components/Panel'
+import SongsService from '@/services/SongsService'
+
 export default {
   data () {
     return {
-      title: null,
-      artist: null,
-      genre: null,
-      album: null,
-      albumImageUrl: null,
-      youtubeId: null,
-      lyrics: null,
-      tab: null
+      song: {
+        title: null,
+        artist: null,
+        genre: null,
+        album: null,
+        albumImageUrl: null,
+        youtubeId: null,
+        lyrics: null,
+        tab: null
+      },
+      error: null,
+      required: (value) => !!value || 'Required.'
+    }
+  },
+  methods: {
+    async create () {
+      this.error = null
+      const areAllFieldsFilledIn = Object
+        .keys(this.song)
+        .every(key => !!this.song[key])
+
+      if (!areAllFieldsFilledIn) {
+        this.error = 'Please fill in all the fields required'
+        return
+      }
+
+      try {
+        await SongsService.post(this.song)
+        this.$router.push({
+          name: 'songs'
+        })
+      } catch (err) {
+        console.log(err)
+      }
     }
   },
   components: {
