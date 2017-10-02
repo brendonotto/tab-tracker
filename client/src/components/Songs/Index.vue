@@ -2,20 +2,20 @@
   <v-layout column>
     <v-flex xs6 offset-xs3>
       <songs-search-panel />
-      <songs-panel />
+      <songs-panel class="mt-2" />
     </v-flex>
   </v-layout>
 </template>
 
 <script>
 import SongsPanel from './SongsPanel'
-import SongsSeachPanel from './SongsSearchPanel'
+import SongsSearchPanel from './SongsSearchPanel'
 import SongsService from '@/services/SongsService'
 export default {
 
   components: {
     SongsPanel,
-    SongsSeachPanel
+    SongsSearchPanel
   },
   data () {
     return {
